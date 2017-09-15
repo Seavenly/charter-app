@@ -1,0 +1,47 @@
+$fadeSpeed: 0.3s;
+
+.fade {
+  &-enter {
+    .transition { 
+      opacity: 0;
+    }
+    .trip-card {
+      animation-duration: 0.5s;
+      animation-fill-mode: both;
+      animation-name: slideDown;
+    }
+  }
+  &-enter.fade-enter-active {
+    .transition {
+      opacity: 1;
+      transition: opacity $fadeSpeed;
+    }
+  }
+  &-exit {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 0;
+
+    .transition {
+      opacity: 1;
+    }
+  }
+  &-exit.fade-exit-active {
+    opacity: 0;
+    transition: opacity $fadeSpeed;    
+  }
+}
+
+@keyframes slideDown {
+  from {
+    transform: translate3d(0, -300%, 0);
+    opacity: 0;
+  }
+
+  to {
+    transform: translate3d(0, 0, 0);
+    opacity: 1;
+  }
+}

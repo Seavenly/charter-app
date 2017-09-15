@@ -1,0 +1,38 @@
+.control {
+  flex: 0 1 20%;
+
+  button {
+    border: none;
+    background: transparent;
+    color: white;
+    background: #64B5F6;
+    padding: 0.5rem;
+    display: inline-flex;
+    align-items: center;
+    border-radius: 0.2rem;
+    box-shadow: 0 0.2rem #1E88E5;
+    transition: all 0.2s;
+    position: relative;
+    top: 0;
+    &:hover {
+      top: -0.2rem;
+      box-shadow: 0 0.4rem #1E87E5;          
+    }
+    &:active {
+      box-shadow: 0 0.2rem #1E88E5;
+      transition: all 0s;
+      top: 0;
+    }
+    &.active {
+      background: white;
+      color: $colorToday;
+      box-shadow: 0 0.2rem #DDD; 
+      &:hover {
+        box-shadow: 0 0.4rem #DDD;
+      }
+      &:active {
+        box-shadow: 0 0.2rem #DDD;
+      }
+    }
+  }
+}

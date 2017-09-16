@@ -2,7 +2,7 @@
   "name": "react__charter",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://seavenly.github.io/charter-app/",
+  "homepage": "https://seavenly.github.io/charter-app",
   "dependencies": {
     "gh-pages": "^1.0.0",
     "moment": "^2.18.1",

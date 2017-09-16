@@ -26,7 +26,7 @@ const WithRouter = withRouter(({ location }) => (
 
 const App = () => (
   <Provider store={store}>
-    <Router>
+    <Router basename="/charter-app">
       <div className="app">
         <WithRouter />
       </div>

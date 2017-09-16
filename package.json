@@ -2,6 +2,7 @@
   "name": "react__charter",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://seavenly.github.io/charter-app/",
   "dependencies": {
     "moment": "^2.18.1",
     "node-sass": "^4.5.3",

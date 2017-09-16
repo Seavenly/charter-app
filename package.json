@@ -4,6 +4,7 @@
   "private": true,
   "homepage": "https://seavenly.github.io/charter-app/",
   "dependencies": {
+    "gh-pages": "^1.0.0",
     "moment": "^2.18.1",
     "node-sass": "^4.5.3",
     "normalize.css": "^7.0.0",
@@ -21,7 +22,9 @@
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
-    "watch:scss": "./node_modules/.bin/node-sass -w src/scss/App.scss -o src/"
+    "watch:scss": "./node_modules/.bin/node-sass -w src/scss/App.scss -o src/",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "devDependencies": {
     "babel-eslint": "^7.2.3",

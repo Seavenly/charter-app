@@ -1,10 +1,8 @@
+/*
+ * FADE Transition
+ */
 .fade-enter .transition {
   opacity: 0; }
-
-.fade-enter .trip-card {
-  animation-duration: 0.5s;
-  animation-fill-mode: both;
-  animation-name: slideDown; }
 
 .fade-enter.fade-enter-active .transition {
   opacity: 1;
@@ -23,6 +21,33 @@
   opacity: 0;
   transition: opacity 0.3s; }
 
+.spinner {
+  position: absolute;
+  top: 1rem;
+  left: 50%;
+  z-index: 0;
+  transform: translatex(-50%); }
+  .spinner i {
+    animation-duration: 1.5s;
+    animation-timing-function: linear;
+    animation-name: spinner;
+    animation-iteration-count: infinite;
+    font-size: 3rem;
+    color: #039BE5;
+    opacity: 1;
+    transition: opacity 0.3s; }
+
+.loaded .trip-card {
+  animation-duration: 0.5s;
+  animation-fill-mode: forwards;
+  animation-name: slideDown;
+  position: relative;
+  z-index: 1; }
+
+.loaded .spinner i {
+  opacity: 0;
+  animation-iteration-count: 1; }
+
 @keyframes slideDown {
   from {
     transform: translate3d(0, -300%, 0);
@@ -30,6 +55,12 @@
   to {
     transform: translate3d(0, 0, 0);
     opacity: 1; } }
+
+@keyframes spinner {
+  from {
+    transform: rotate(0deg); }
+  to {
+    transform: rotate(360deg); } }
 
 .control {
   flex: 0 1 20%; }
@@ -184,9 +215,6 @@
     z-index: 0;
     transform: rotate(45deg) translate(-50%, 0); }
 
-.footer {
-  border-radius: 0 0 0.2rem 0.2rem; }
-
 .legend {
   background: white;
   padding-top: 1rem; }
@@ -229,7 +257,8 @@
   position: relative;
   box-shadow: 0 0.2rem 0 0 #DDD;
   border-radius: 0.2rem;
-  overflow: hidden; }
+  overflow: hidden;
+  opacity: 0; }
   .trip-card .top {
     position: relative; }
   .trip-card .image {
@@ -270,7 +299,7 @@
     padding: 0.5rem;
     text-align: right; }
 
-.no-trips {
+.available-trips p {
   padding: 1rem 0 2rem; }
 
 * {
@@ -316,10 +345,13 @@ button {
       font-weight: 400;
       text-transform: uppercase;
       font-size: 1.2rem; }
+  .view .body {
+    position: relative; }
   .view .footer {
     background: #039BE5;
     padding: 0.6rem 0;
-    box-shadow: 0 -0.2rem #DDD; }
+    box-shadow: 0 -0.2rem #DDD;
+    border-radius: 0 0 0.2rem 0.2rem; }
     .view .footer ul li {
       display: inline-block;
       margin: 0 0.5rem; }

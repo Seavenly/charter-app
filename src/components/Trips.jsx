@@ -1,38 +1,63 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Moment from 'moment';
 
 import Trip from './Trip';
 
-/**
- * Setup available trip components otherwise say no trips available
- * @param {Object[]} trips - populted trip objects for the selected day
- * @returns available trips with animation delays
- */
-function availableTrips(trips) {
-  let available = [];
-  if (trips) {
-    available = trips.filter(t => !t.booked).map((t, index) =>
-      <li key={t.id}><Trip trip={t} delay={`${0.5 - ((0.3 / trips.length) * index)}s`} /></li>);
-  }
-  return available.length ? <ul className="trips-list">{available}</ul>
-    : <div className="no-trips">There are no available trips for this date.</div>;
-}
+class Trips extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      trips: this.availableTrips(),
+      imagesLoaded: 0,
+      allLoaded: false,
+    };
 
-const Trips = ({ history, match, trips, moment }) => (
-  <div className="trips view">
-    <div className="header">
-      <div className="control">
-        <button onClick={() => history.goBack()}><i className="material-icons">arrow_back</i></button>
+    this.handleImageLoaded = this.handleImageLoaded.bind(this);
+    this.availableTrips = this.availableTrips.bind(this);
+  }
+
+  handleImageLoaded() {
+    this.setState(prevState => ({ imagesLoaded: prevState.imagesLoaded + 1 }));
+  }
+
+  availableTrips() {
+    let available = [];
+    const trips = this.props.trips(this.props.match.params.day);
+    if (trips) {
+      available = trips.filter(t => !t.booked).map((t, index) =>
+        <li key={t.id}><Trip trip={t} delay={`${0.5 - ((0.3 / trips.length) * index)}s`} loaded={() => this.handleImageLoaded()} /></li>);
+    }
+    return available;
+  }
+
+  render() {
+    const { history, moment } = this.props;
+    return (
+      <div className="trips view">
+        <div className="header">
+          <div className="control">
+            <button onClick={() => history.goBack()}><i className="material-icons">arrow_back</i></button>
+          </div>
+          <div className="heading"><h2>{moment.format('ddd, MMM D YYYY')}</h2></div>
+        </div>
+        <div className={`body transition${this.state.imagesLoaded >= this.state.trips.length ? ' loaded' : ''}`}>
+          <div className="available-trips">
+            {
+              this.state.trips.length ?
+                <ul className="trips-list">{this.state.trips}</ul> :
+                <p>There are no available trips for this date.</p>
+            }
+          </div>
+          <div className="spinner">
+            <i className="material-icons">autorenew</i>
+          </div>
+        </div>
       </div>
-      <div className="heading"><h2>{moment.format('ddd, MMM D YYYY')}</h2></div>
-    </div>
-    <div className="body transition">
-      {availableTrips(trips(match.params.day))}
-    </div>
-  </div>
-);
+    );
+  }
+}
 
 Trips.propTypes = {
   history: PropTypes.shape({

@@ -63,8 +63,8 @@ class Booking extends Component {
               <button>Submit</button>
             </div>
           </form>
-          <FormMessage inProp={this.state.submit} />
         </div>
+        <FormMessage inProp={this.state.submit} />
       </div>
     );
   }

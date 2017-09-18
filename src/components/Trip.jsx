@@ -4,12 +4,12 @@ import PropTypes from 'prop-types';
 import Moment from 'moment';
 import { Link } from 'react-router-dom';
 
-const Trip = ({ trip, delay }) => (
+const Trip = ({ trip, delay, loaded }) => (
   <div className="trip-card" style={{ animationDelay: delay }}>
     <div className="top">
       <div className="image">
         <div className="overlay" style={{ background: trip.boat.color }} />
-        <img src={trip.boat.image} alt={trip.boat.name} />
+        <img src={trip.boat.image} alt={trip.boat.name} onLoad={() => loaded()} />
       </div>
       <div className="info">
         <div className="boat-name"><h3>{trip.boat.name}</h3> {trip.boat.size}</div>
@@ -34,11 +34,12 @@ Trip.propTypes = {
     end: PropTypes.string,
     booked: PropTypes.bool,
   }).isRequired,
-  delay: PropTypes.number,
+  delay: PropTypes.string,
+  loaded: PropTypes.func.isRequired,
 };
 
 Trip.defaultProps = {
-  delay: 500,
+  delay: '500',
 };
 
 export default Trip;

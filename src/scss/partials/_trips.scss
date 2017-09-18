@@ -24,6 +24,7 @@
   box-shadow: 0 0.2rem 0 0 #DDD;
   border-radius: 0.2rem;
   overflow: hidden;
+  opacity: 0;
 
   .top {
     position: relative;
@@ -80,6 +81,6 @@
   }
 }
 
-.no-trips {
+.available-trips p {
   padding: 1rem 0 2rem;
 }

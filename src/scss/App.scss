@@ -28,7 +28,6 @@ button {
   max-width: 30rem;
   margin: auto;
   font-family: 'Roboto', sans-serif;
-  margin-top: 2rem;
   position: relative;
   background: #FAFAFA;
   overflow: hidden;
@@ -46,9 +45,12 @@ button {
     background: $colorToday;
     padding: 0.6rem 0;
     color: white;
-    box-shadow: 0 0.2rem #DDD;
+    box-shadow: 0 0.2rem rgba(0, 0, 0, 0.2);
     position: relative;
     z-index: 5;
+    position: fixed;
+    width: 100%;
+    max-width: 30rem;
   }
   .heading {
     flex: 0 3 60%;
@@ -56,11 +58,13 @@ button {
       font-weight: 400;
       text-transform: uppercase;
       font-size: 1.2rem;
+      white-space: nowrap;
     }
   }
 
   .body {
     position: relative;
+    margin-top: 4.8rem;
   }
   
   .footer {

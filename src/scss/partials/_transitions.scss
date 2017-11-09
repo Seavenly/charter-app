@@ -4,12 +4,12 @@ $fadeSpeed: 0.3s;
  * FADE Transition
  */
 .fade-enter {
-  .transition { 
+  .view__body {
     opacity: 0;
   }
 }
 .fade-enter.fade-enter-active {
-  .transition {
+  .view__body {
     opacity: 1;
     transition: opacity $fadeSpeed;
   }
@@ -21,20 +21,18 @@ $fadeSpeed: 0.3s;
   width: 100%;
   z-index: 0;
 
-  .transition {
+  .view__body {
     opacity: 1;
   }
 }
 .fade-exit.fade-exit-active {
   opacity: 0;
-  transition: opacity $fadeSpeed;    
+  transition: opacity $fadeSpeed;
 }
-
-
 
 .spinner {
   position: absolute;
-  top: 1rem;
+  top: 8rem;
   left: 50%;
   z-index: 0;
   transform: translatex(-50%);
@@ -50,15 +48,15 @@ $fadeSpeed: 0.3s;
     transition: opacity 0.3s;
   }
 }
-.loaded {
-  .trip-card {
+.trips--loaded {
+  .trip {
     animation-duration: 0.5s;
     animation-fill-mode: forwards;
     animation-name: slideDown;
     position: relative;
     z-index: 1;
   }
-  .spinner {
+  & ~ .spinner {
     i {
       opacity: 0;
       animation-iteration-count: 1;

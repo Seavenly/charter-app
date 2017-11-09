@@ -3,11 +3,11 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import CSSTransition from 'react-transition-group/CSSTransition';
 
+import View from './View';
+
 const FormMessage = ({ inProp }) => (
   <CSSTransition in={inProp} duration={500} classNames="slide">
-    <div className="form-message">
-      Booked successfully
-    </div>
+    <div className="form-message">Booked successfully</div>
   </CSSTransition>
 );
 
@@ -40,32 +40,45 @@ class Booking extends Component {
     const populatedTrip = trip(match.params.trip);
 
     return (
-      <div className="booking view">
-        <div className="header">
-          <div className="control">
-            <button onClick={() => history.goBack()}><i className="material-icons">arrow_back</i></button>
+      <View header={`Book ${populatedTrip.boat.name}`} back={() => history.goBack()}>
+        <form
+          className="booking-form"
+          onSubmit={e => this.handleSubmit(e) || bookTrip(populatedTrip.id, populatedTrip.day)}
+        >
+          <label className="booking-form__label" htmlFor="form-name">
+            Name:
+          </label>
+          <div className="booking-form__control-wrapper">
+            <input
+              className="booking-form__control"
+              id="form-name"
+              type="text"
+              value={this.state.form['form-name']}
+              onChange={this.handleChange}
+              placeholder="Name"
+            />
+            <i className="material-icons">person</i>
           </div>
-          <div className="heading"><h2>{`Book ${populatedTrip.boat.name}`}</h2></div>
-        </div>
-        <div className="body transition">
-          <form className="booking-form" onSubmit={e => this.handleSubmit(e) || bookTrip(populatedTrip.id, populatedTrip.day)}>
-            <label htmlFor="form-name">Name:</label>
-            <div className="form-control">
-              <input id="form-name" type="text" value={this.state.form['form-name']} onChange={this.handleChange} placeholder="Name" />
-              <i className="material-icons">person</i>
-            </div>
-            <label htmlFor="form-email">Email:</label>
-            <div className="form-control">
-              <input id="form-email" type="email" value={this.state.form['form-email']} onChange={this.handleChange} placeholder="Email" />
-              <i className="material-icons">email</i>
-            </div>
-            <div className="control">
-              <button>Submit</button>
-            </div>
-          </form>
-        </div>
+          <label className="booking-form__label" htmlFor="form-email">
+            Email:
+          </label>
+          <div className="booking-form__control-wrapper">
+            <input
+              className="booking-form__control"
+              id="form-email"
+              type="email"
+              value={this.state.form['form-email']}
+              onChange={this.handleChange}
+              placeholder="Email"
+            />
+            <i className="material-icons">email</i>
+          </div>
+          <div className="control">
+            <button className="control__btn">Submit</button>
+          </div>
+        </form>
         <FormMessage inProp={this.state.submit} />
-      </div>
+      </View>
     );
   }
 }
@@ -82,7 +95,7 @@ Booking.propTypes = {
 };
 
 const mapStateToProps = state => ({
-  trip: (id) => {
+  trip: id => {
     const populatedTrip = { ...state.trips.find(trip => trip.id === +id) };
     populatedTrip.boat = state.boats.find(boat => boat.id === populatedTrip.boat);
     return populatedTrip;

@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Moment from 'moment';
 
+import View from './View';
 import Trip from './Trip';
 
 class Trips extends Component {
@@ -26,8 +27,15 @@ class Trips extends Component {
     let available = [];
     const trips = this.props.trips(this.props.match.params.day);
     if (trips) {
-      available = trips.filter(t => !t.booked).map((t, index) =>
-        <li key={t.id}><Trip trip={t} delay={`${0.5 - ((0.3 / trips.length) * index)}s`} loaded={() => this.handleImageLoaded()} /></li>);
+      available = trips.filter(t => !t.booked).map((t, index) => (
+        <li className="trips__item" key={t.id}>
+          <Trip
+            trip={t}
+            delay={`${0.5 - 0.3 / trips.length * index}s`}
+            loaded={() => this.handleImageLoaded()}
+          />
+        </li>
+      ));
     }
     return available;
   }
@@ -35,26 +43,22 @@ class Trips extends Component {
   render() {
     const { history, moment } = this.props;
     return (
-      <div className="trips view">
-        <div className="header">
-          <div className="control">
-            <button onClick={() => history.goBack()}><i className="material-icons">arrow_back</i></button>
-          </div>
-          <div className="heading"><h2>{moment.format('ddd, MMM D YYYY')}</h2></div>
+      <View header={moment.format('ddd, MMM D YYYY')} back={() => history.goBack()}>
+        <div
+          className={`trips${
+            this.state.imagesLoaded >= this.state.trips.length ? ' trips--loaded' : ''
+          }`}
+        >
+          {this.state.trips.length ? (
+            <ul className="trips__list">{this.state.trips}</ul>
+          ) : (
+            <p className="trips__message">There are no available trips for this date.</p>
+          )}
         </div>
-        <div className={`body transition${this.state.imagesLoaded >= this.state.trips.length ? ' loaded' : ''}`}>
-          <div className="available-trips">
-            {
-              this.state.trips.length ?
-                <ul className="trips-list">{this.state.trips}</ul> :
-                <p>There are no available trips for this date.</p>
-            }
-          </div>
-          <div className="spinner">
-            <i className="material-icons">autorenew</i>
-          </div>
+        <div className="spinner">
+          <i className="material-icons">autorenew</i>
         </div>
-      </div>
+      </View>
     );
   }
 }
@@ -71,10 +75,10 @@ Trips.propTypes = {
 };
 
 const mapStateToProps = state => ({
-  trips: (date) => {
+  trips: date => {
     const tripDay = { ...state.days.find(day => day.date === date) };
     if (tripDay.trips) {
-      tripDay.trips = tripDay.trips.map((tripId) => {
+      tripDay.trips = tripDay.trips.map(tripId => {
         const populatedTrip = { ...state.trips.find(t => t.id === tripId) };
         populatedTrip.boat = state.boats.find(boat => populatedTrip.boat === boat.id);
         return populatedTrip;

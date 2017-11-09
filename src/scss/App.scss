@@ -29,7 +29,7 @@ button {
   margin: auto;
   font-family: 'Roboto', sans-serif;
   position: relative;
-  background: #FAFAFA;
+  background: #fafafa;
   overflow: hidden;
 }
 
@@ -38,7 +38,7 @@ button {
   border-radius: 0.2rem;
   overflow: hidden;
 
-  .header {
+  &__header {
     display: flex;
     align-items: center;
     margin-bottom: 1rem;
@@ -51,8 +51,9 @@ button {
     position: fixed;
     width: 100%;
     max-width: 30rem;
+    border-radius: 0.2rem 0.2rem 0 0;
   }
-  .heading {
+  &__heading {
     flex: 0 3 60%;
     h2 {
       font-weight: 400;
@@ -62,23 +63,7 @@ button {
     }
   }
 
-  .body {
-    position: relative;
+  &__body {
     margin-top: 4.8rem;
   }
-  
-  .footer {
-    background: $colorToday;
-    padding: 0.6rem 0;
-    box-shadow: 0 -0.2rem #DDD;
-    border-radius: 0 0 0.2rem 0.2rem;    
-  
-    ul {
-      li {
-        display: inline-block;
-        margin: 0 0.5rem;
-      }
-    }
-  }
 }
-

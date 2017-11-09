@@ -5,9 +5,13 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 const Day = ({ moment, status, setDay }) => (
-  <div className={`cell day ${status}`}>
-    <Link to={`/trips/${moment.format('YYYYMMDD')}`} onClick={() => setDay(moment)}>
-      <span>{moment.format('DD')}</span>
+  <div className={`day day--${status}`}>
+    <Link
+      className="day__link"
+      to={`/trips/${moment.format('YYYYMMDD')}`}
+      onClick={() => setDay(moment)}
+    >
+      <span className="day__date">{moment.format('DD')}</span>
     </Link>
   </div>
 );

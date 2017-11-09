@@ -1,10 +1,10 @@
 /*
  * FADE Transition
  */
-.fade-enter .transition {
+.fade-enter .view__body {
   opacity: 0; }
 
-.fade-enter.fade-enter-active .transition {
+.fade-enter.fade-enter-active .view__body {
   opacity: 1;
   transition: opacity 0.3s; }
 
@@ -14,7 +14,7 @@
   left: 0;
   width: 100%;
   z-index: 0; }
-  .fade-exit .transition {
+  .fade-exit .view__body {
     opacity: 1; }
 
 .fade-exit.fade-exit-active {
@@ -23,7 +23,7 @@
 
 .spinner {
   position: absolute;
-  top: 1rem;
+  top: 8rem;
   left: 50%;
   z-index: 0;
   transform: translatex(-50%); }
@@ -37,14 +37,14 @@
     opacity: 1;
     transition: opacity 0.3s; }
 
-.loaded .trip-card {
+.trips--loaded .trip {
   animation-duration: 0.5s;
   animation-fill-mode: forwards;
   animation-name: slideDown;
   position: relative;
   z-index: 1; }
 
-.loaded .spinner i {
+.trips--loaded ~ .spinner i {
   opacity: 0;
   animation-iteration-count: 1; }
 
@@ -64,7 +64,7 @@
 
 .control {
   flex: 0 1 20%; }
-  .control button {
+  .control__btn {
     border: none;
     background: transparent;
     color: white;
@@ -77,20 +77,20 @@
     transition: all 0.2s;
     position: relative;
     top: 0; }
-    .control button:hover {
+    .control__btn:hover {
       top: -0.2rem;
       box-shadow: 0 0.4rem #1E87E5; }
-    .control button:active {
+    .control__btn:active {
       box-shadow: 0 0.2rem #1E88E5;
       transition: all 0s;
       top: 0; }
-    .control button.active {
+    .control__btn--active {
       background: white;
       color: #039BE5;
       box-shadow: 0 0.2rem #DDD; }
-      .control button.active:hover {
+      .control__btn--active:hover {
         box-shadow: 0 0.4rem #DDD; }
-      .control button.active:active {
+      .control__btn--active:active {
         box-shadow: 0 0.2rem #DDD; }
 
 .booking-form {
@@ -98,22 +98,23 @@
   max-width: 20rem;
   margin: auto;
   padding: 0 5%; }
-  .booking-form label {
+  .booking-form__label {
     display: block;
     position: absolute;
     z-index: -1000;
     left: -10000px; }
-  .booking-form input[type=text],
-  .booking-form input[type=email] {
+  .booking-form__control[type='text'], .booking-form__control[type='email'] {
     padding: 0.5rem;
     border: none;
     width: 100%; }
-  .booking-form .form-control {
+  .booking-form__control:focus ~ i {
+    color: #2d2d2d; }
+  .booking-form__control-wrapper {
     box-shadow: 0 0.2rem 0 0 #eee;
     border-radius: 0.2rem;
     display: flex;
     margin: 1rem auto; }
-    .booking-form .form-control i {
+    .booking-form__control-wrapper i {
       background: white;
       color: #bbb;
       display: flex;
@@ -121,8 +122,6 @@
       padding: 0.5rem;
       order: -1;
       transition: color 0.5s; }
-    .booking-form .form-control input:focus ~ i {
-      color: #2d2d2d; }
   .booking-form .control {
     max-width: 20rem;
     text-align: right;
@@ -130,7 +129,7 @@
     margin-bottom: 1rem; }
 
 .form-message {
-  background: #4CAF50;
+  background: #4caf50;
   color: white;
   text-transform: uppercase;
   font-size: 1rem;
@@ -150,130 +149,151 @@
   .form-message.slide-enter.slide-enter-active {
     transform: translate(-50%, 0); }
 
-.cal-weeks {
+.calendar__weeks {
   margin: 0 5% 1rem; }
 
-.cal-days {
+.calendar__days {
   margin: 0 5% 2rem; }
 
-.cal-weeks,
-.cal-days {
+.calendar__weeks, .calendar__days {
   display: flex;
   flex-wrap: wrap; }
 
-.today a,
-.open a,
-.partial a,
-.full a {
-  color: white !important; }
+.calendar__cell {
+  flex: 1 1 14.28571428571429%;
+  position: relative;
+  z-index: 2; }
 
-.cal-days .cell::after {
+.calendar__legend {
+  background: white;
+  padding-top: 1rem; }
+
+.calendar__key {
+  display: inline-block;
+  margin: 0.3rem 1rem; }
+
+.calendar__footer {
+  background: #039BE5;
+  padding: 0.6rem 0;
+  box-shadow: 0 -0.2rem #ddd;
+  border-radius: 0 0 0.2rem 0.2rem; }
+  .calendar__footer ul li {
+    display: inline-block;
+    margin: 0 0.5rem; }
+
+.day::after {
   content: '';
   display: flex;
   padding-bottom: 100%; }
 
-.cell {
-  flex: 1 1 14.28571428571429%;
+.day--today .day__link, .day--open .day__link, .day--partial .day__link, .day--full .day__link {
+  color: white !important; }
+
+.day--inactive .day__link {
+  color: #ccc !important; }
+
+.day--open .day__link {
+  background: #4CAF50; }
+
+.day--partial .day__link {
+  background: #FFA000; }
+
+.day--full .day__link {
+  background: #f44336; }
+
+.day--empty .day__link {
+  background: #E0E0E0; }
+
+.day--today.day--empty .day__link {
+  background: #039BE5; }
+
+.day--today:not(.day--inactive):not(.day--empty) .day__link::before {
+  content: '';
+  display: block;
+  position: absolute;
+  top: -30%;
+  left: -30%;
+  right: -30%;
+  bottom: -30%;
+  background: #039BE5;
+  z-index: 0;
+  transform: rotate(45deg) translate(-50%, 0); }
+
+.day__link {
+  border-radius: 0.2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-decoration: none;
+  color: #2d2d2d;
+  position: absolute;
+  top: 5%;
+  left: 5%;
+  right: 5%;
+  bottom: 5%;
+  overflow: hidden; }
+
+.day__date {
   position: relative;
-  z-index: 2; }
-  .cell a {
-    border-radius: 0.2rem;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-decoration: none;
-    color: #2d2d2d;
-    position: absolute;
-    top: 5%;
-    left: 5%;
-    right: 5%;
-    bottom: 5%;
-    overflow: hidden; }
-    .cell a span {
-      position: relative;
-      z-index: 1; }
-  .cell.inactive a {
-    color: #ccc !important; }
-  .cell.open a {
-    background: #4CAF50; }
-  .cell.partial a {
-    background: #FFA000; }
-  .cell.full a {
-    background: #f44336; }
-  .cell.empty a {
-    background: #E0E0E0; }
-  .cell.today.empty a {
+  z-index: 1; }
+
+.color {
+  display: inline-block;
+  width: 1rem;
+  height: 1rem;
+  border-radius: 0.2rem;
+  margin-right: 0.5rem; }
+  .color--today {
     background: #039BE5; }
-  .cell.today:not(.inactive):not(.empty) a::before {
-    content: '';
-    display: block;
-    position: absolute;
-    top: -30%;
-    left: -30%;
-    right: -30%;
-    bottom: -30%;
-    background: #039BE5;
-    z-index: 0;
-    transform: rotate(45deg) translate(-50%, 0); }
+  .color--open {
+    background: #4CAF50; }
+  .color--partial {
+    background: #FFA000; }
+  .color--full {
+    background: #f44336; }
+  .color--empty {
+    background: #E0E0E0; }
 
-.legend {
-  background: white;
-  padding-top: 1rem; }
-  .legend .key {
-    display: inline-block;
-    margin: 0.3rem 1rem; }
-    .legend .key .color {
-      display: inline-block;
-      width: 1rem;
-      height: 1rem;
-      border-radius: 0.2rem;
-      margin-right: 0.5rem; }
-      .legend .key .color.today {
-        background: #039BE5; }
-      .legend .key .color.open {
-        background: #4CAF50; }
-      .legend .key .color.partial {
-        background: #FFA000; }
-      .legend .key .color.full {
-        background: #f44336; }
-      .legend .key .color.empty {
-        background: #E0E0E0; }
-
-.trips-list {
+.trips__list {
   display: flex;
   flex-wrap: wrap;
   justify-content: center; }
-  .trips-list li {
-    padding: 0.5rem;
-    flex: 1 1 100%;
-    max-width: 16rem; }
-  @media (min-width: 31.25rem) {
-    .trips-list {
-      justify-content: flex-start; }
-      .trips-list li {
-        flex: 0 0 calc(50% - 1rem); } }
 
-.trip-card {
+.trips__item {
+  padding: 0.5rem;
+  flex: 1 1 100%;
+  max-width: 16rem; }
+
+.trips__message {
+  padding: 1rem 0 2rem; }
+
+@media (min-width: 31.25rem) {
+  .trips__list {
+    justify-content: flex-start; }
+  .trips__item {
+    flex: 0 0 calc(50% - 1rem); } }
+
+.trip {
   margin: auto;
   position: relative;
-  box-shadow: 0 0.2rem 0 0 #DDD;
+  box-shadow: 0 0.2rem 0 0 #ddd;
   border-radius: 0.2rem;
   overflow: hidden;
   opacity: 0; }
-  .trip-card .top {
+  .trip__top {
     position: relative; }
-  .trip-card .image {
+  .trip__image {
     position: relative;
     line-height: 0; }
-    .trip-card .image .overlay {
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      z-index: 1;
-      opacity: 0.8; }
-  .trip-card .info {
+  .trip__overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1;
+    opacity: 0.8; }
+  .trip__info {
     position: absolute;
     top: 50%;
     left: 10%;
@@ -281,27 +301,24 @@
     color: white;
     z-index: 2;
     text-align: left; }
-    .trip-card .info h3 {
-      display: inline-block; }
-    .trip-card .info .time {
-      border: 1px solid white;
-      margin-top: 0.2rem;
-      border-radius: 0.2rem;
-      display: flex;
-      align-items: center; }
-      .trip-card .info .time span {
-        padding: 0.5rem; }
-      .trip-card .info .time .type {
-        background: white;
-        color: #2d2d2d;
-        font-weight: 700; }
-  .trip-card .control {
+  .trip__boat-name {
+    display: inline-block; }
+  .trip__time {
+    border: 1px solid white;
+    margin-top: 0.2rem;
+    border-radius: 0.2rem;
+    display: flex;
+    align-items: center; }
+    .trip__time span {
+      padding: 0.5rem; }
+  .trip__type {
+    background: white;
+    color: #2d2d2d;
+    font-weight: 700; }
+  .trip .control {
     background: white;
     padding: 0.5rem;
     text-align: right; }
-
-.available-trips p {
-  padding: 1rem 0 2rem; }
 
 * {
   padding: 0;
@@ -322,14 +339,14 @@ button {
   margin: auto;
   font-family: 'Roboto', sans-serif;
   position: relative;
-  background: #FAFAFA;
+  background: #fafafa;
   overflow: hidden; }
 
 .view {
   text-align: center;
   border-radius: 0.2rem;
   overflow: hidden; }
-  .view .header {
+  .view__header {
     display: flex;
     align-items: center;
     margin-bottom: 1rem;
@@ -341,22 +358,14 @@ button {
     z-index: 5;
     position: fixed;
     width: 100%;
-    max-width: 30rem; }
-  .view .heading {
+    max-width: 30rem;
+    border-radius: 0.2rem 0.2rem 0 0; }
+  .view__heading {
     flex: 0 3 60%; }
-    .view .heading h2 {
+    .view__heading h2 {
       font-weight: 400;
       text-transform: uppercase;
       font-size: 1.2rem;
       white-space: nowrap; }
-  .view .body {
-    position: relative;
+  .view__body {
     margin-top: 4.8rem; }
-  .view .footer {
-    background: #039BE5;
-    padding: 0.6rem 0;
-    box-shadow: 0 -0.2rem #DDD;
-    border-radius: 0 0 0.2rem 0.2rem; }
-    .view .footer ul li {
-      display: inline-block;
-      margin: 0 0.5rem; }

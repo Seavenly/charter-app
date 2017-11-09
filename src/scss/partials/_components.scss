@@ -1,7 +1,7 @@
 .control {
   flex: 0 1 20%;
 
-  button {
+  &__btn {
     border: none;
     background: transparent;
     color: white;
@@ -23,7 +23,7 @@
       transition: all 0s;
       top: 0;
     }
-    &.active {
+    &--active {
       background: white;
       color: $colorToday;
       box-shadow: 0 0.2rem #DDD; 

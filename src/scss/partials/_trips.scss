@@ -1,49 +1,57 @@
-.trips-list {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;  
-  
-  li {
+.trips {
+  &__list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  &__item {
     padding: 0.5rem;
     flex: 1 1 100%;
     max-width: 16rem;
   }
 
-  @media (min-width: 31.25rem) {
-    justify-content: flex-start;
+  &__message {
+    padding: 1rem 0 2rem;
+  }
 
-    li {
-      flex: 0 0 calc(50% - 1rem);      
+  @media (min-width: 31.25rem) {
+    &__list {
+      justify-content: flex-start;
+    }
+
+    &__item {
+      flex: 0 0 calc(50% - 1rem);
     }
   }
 }
 
-.trip-card {
+.trip {
   margin: auto;
   position: relative;
-  box-shadow: 0 0.2rem 0 0 #DDD;
+  box-shadow: 0 0.2rem 0 0 #ddd;
   border-radius: 0.2rem;
   overflow: hidden;
   opacity: 0;
 
-  .top {
+  &__top {
     position: relative;
   }
 
-  .image {
+  &__image {
     position: relative;
     line-height: 0;
-    .overlay {
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      z-index: 1;
-      opacity: 0.8;
-    }
   }
-  .info {
+  &__overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1;
+    opacity: 0.8;
+  }
+  &__info {
     position: absolute;
     top: 50%;
     left: 10%;
@@ -51,36 +59,32 @@
     color: white;
     z-index: 2;
     text-align: left;
+  }
+  &__boat-name {
+    display: inline-block;
+  }
 
-    h3 {
-      display: inline-block;
-    }
+  &__time {
+    border: 1px solid white;
+    margin-top: 0.2rem;
+    border-radius: 0.2rem;
+    display: flex;
+    align-items: center;
 
-    .time {
-      border: 1px solid white;
-      margin-top: 0.2rem;
-      border-radius: 0.2rem;
-      display: flex;
-      align-items: center;
-
-      span {
-        padding: 0.5rem;
-      }
-
-      .type {
-        background: white;
-        color: $colorBlack;
-        font-weight: 700;
-      }
+    span {
+      padding: 0.5rem;
     }
   }
+
+  &__type {
+    background: white;
+    color: $colorBlack;
+    font-weight: 700;
+  }
+
   .control {
     background: white;
     padding: 0.5rem;
     text-align: right;
   }
-}
-
-.available-trips p {
-  padding: 1rem 0 2rem;
 }

@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Moment from 'moment';
 
+import View from './View';
 import Day from './Day';
 
 // Moment object for today's date
@@ -28,13 +29,11 @@ function daysInMonth(calMoment, scheduledDays) {
         else status = 'partial';
       } else status = 'empty';
     }
-    if (tempMoment.format('YYMMDD') === today.format('YYMMDD')) status = `${status} today`;
+    if (tempMoment.format('YYMMDD') === today.format('YYMMDD')) status = `${status} day--today`;
     days.push(
-      <Day
-        key={i}
-        moment={new Moment(tempMoment)}
-        status={status}
-      />,
+      <div className="calendar__cell">
+        <Day key={i} moment={new Moment(tempMoment)} status={status} />
+      </div>,
     );
     tempMoment.add(1, 'days');
   }
@@ -42,51 +41,75 @@ function daysInMonth(calMoment, scheduledDays) {
 }
 
 const Calendar = ({ calMoment, days, onControlClick, changeYear }) => (
-  <div className="calendar view">
-    <div className="header">
-      <div className="control">
-        <button onClick={() => onControlClick('LEFT')}><i className="material-icons">arrow_back</i></button>
+  <View
+    header={calMoment.format('MMMM YYYY')}
+    back={() => onControlClick('LEFT')}
+    forward={() => onControlClick('RIGHT')}
+  >
+    <div className="calendar">
+      <div className="calendar__weeks">
+        <div className="calendar__cell">Sun</div>
+        <div className="calendar__cell">Mon</div>
+        <div className="calendar__cell">Tue</div>
+        <div className="calendar__cell">Wed</div>
+        <div className="calendar__cell">Thu</div>
+        <div className="calendar__cell">Fri</div>
+        <div className="calendar__cell">Sat</div>
       </div>
-      <div className="heading"><h2>{ calMoment.format('MMMM YYYY') }</h2></div>
-      <div className="control">
-        <button onClick={() => onControlClick('RIGHT')}><i className="material-icons">arrow_forward</i></button>
-      </div>
-    </div>
-    <div className="body transition">
-      <div className="cal-weeks">
-        <div className="cell">Sun</div>
-        <div className="cell">Mon</div>
-        <div className="cell">Tue</div>
-        <div className="cell">Wed</div>
-        <div className="cell">Thu</div>
-        <div className="cell">Fri</div>
-        <div className="cell">Sat</div>
-      </div>
-      <div className="cal-days">
-        { daysInMonth(calMoment, days) }
-      </div>
-      <div className="footer">
+      <div className="calendar__days">{daysInMonth(calMoment, days)}</div>
+      <div className="calendar__footer">
         <ul>
           <li className="control">
-            <button className={calMoment.year() === today.year() ? 'active' : ''} onClick={() => changeYear(today.year())}>{today.year()}</button>
+            <button
+              className={`control__btn ${
+                calMoment.year() === today.year() ? 'control__btn--active' : ''
+              }`}
+              onClick={() => changeYear(today.year())}
+            >
+              {today.year()}
+            </button>
           </li>
           <li className="control">
-            <button className={calMoment.year() === today.year() + 1 ? 'active' : ''} onClick={() => changeYear(today.year() + 1)}>{today.year() + 1}</button>
+            <button
+              className={`control__btn ${
+                calMoment.year() === today.year() + 1 ? 'control__btn--active' : ''
+              }`}
+              onClick={() => changeYear(today.year() + 1)}
+            >
+              {today.year() + 1}
+            </button>
           </li>
           <li className="control">
-            <button className={calMoment.year() === today.year() + 2 ? 'active' : ''} onClick={() => changeYear(today.year() + 2)}>{today.year() + 2}</button>
+            <button
+              className={`control__btn ${
+                calMoment.year() === today.year() + 2 ? 'control__btn--active' : ''
+              }`}
+              onClick={() => changeYear(today.year() + 2)}
+            >
+              {today.year() + 2}
+            </button>
           </li>
         </ul>
       </div>
-      <div className="legend">
-        <div className="key"><span className="color today" /><span className="name">Today</span></div>
-        <div className="key"><span className="color open" /><span className="name">All available</span></div>
-        <div className="key"><span className="color partial" /><span className="name">Some available</span></div>
-        <div className="key"><span className="color full" /><span className="name">All booked</span></div>
-        <div className="key"><span className="color empty" /><span className="name">No trips</span></div>
+      <div className="calendar__legend">
+        <div className="calendar__key">
+          <span className="color color--today" />Today
+        </div>
+        <div className="calendar__key">
+          <span className="color color--open" />All available
+        </div>
+        <div className="calendar__key">
+          <span className="color color--partial" />Some available
+        </div>
+        <div className="calendar__key">
+          <span className="color color--full" />All booked
+        </div>
+        <div className="calendar__key">
+          <span className="color color--empty" />No trips
+        </div>
       </div>
     </div>
-  </div>
+  </View>
 );
 
 Calendar.propTypes = {
@@ -101,17 +124,13 @@ const mapStateToProps = state => ({
   days: state.days,
 });
 const mapDispatchToProps = dispatch => ({
-  onControlClick: (direction) => {
+  onControlClick: direction => {
     if (direction === 'LEFT') dispatch({ type: 'MONTH_DOWN' });
     else if (direction === 'RIGHT') dispatch({ type: 'MONTH_UP' });
   },
-  changeYear: (year) => {
+  changeYear: year => {
     dispatch({ type: 'CHANGE_YEAR', year });
   },
 });
 
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(Calendar);
+export default connect(mapStateToProps, mapDispatchToProps)(Calendar);

@@ -5,22 +5,31 @@ import Moment from 'moment';
 import { Link } from 'react-router-dom';
 
 const Trip = ({ trip, delay, loaded }) => (
-  <div className="trip-card" style={{ animationDelay: delay }}>
-    <div className="top">
-      <div className="image">
-        <div className="overlay" style={{ background: trip.boat.color }} />
+  <div className="trip" style={{ animationDelay: delay }}>
+    <div className="trip__top">
+      <div className="trip__image">
+        <div className="trip__overlay" style={{ background: trip.boat.color }} />
         <img src={trip.boat.image} alt={trip.boat.name} onLoad={() => loaded()} />
       </div>
-      <div className="info">
-        <div className="boat-name"><h3>{trip.boat.name}</h3> {trip.boat.size}</div>
-        <div className="time">
-          <span className="type" style={{ color: trip.boat.color }}>{new Moment(`${trip.day}T${trip.start}`).hour() < 12 ? 'AM' : 'PM'}</span>
-          <span>{new Moment(`${trip.day}T${trip.start}`).format('h:mm A')} - {new Moment(`${trip.day}T${trip.end}`).format('h:mm A ')}</span>
+      <div className="trip__info">
+        <div className="trip__title">
+          <h3 className="trip__boat-name">{trip.boat.name}</h3> {trip.boat.size}
+        </div>
+        <div className="trip__time">
+          <span className="trip__type" style={{ color: trip.boat.color }}>
+            {new Moment(`${trip.day}T${trip.start}`).hour() < 12 ? 'AM' : 'PM'}
+          </span>
+          <span>
+            {new Moment(`${trip.day}T${trip.start}`).format('h:mm A')} -{' '}
+            {new Moment(`${trip.day}T${trip.end}`).format('h:mm A ')}
+          </span>
         </div>
       </div>
     </div>
     <div className="control">
-      <Link to={`/book/${trip.id}`}><button>Book Now</button></Link>
+      <Link to={`/book/${trip.id}`}>
+        <button className="control__btn">Book Now</button>
+      </Link>
     </div>
   </div>
 );

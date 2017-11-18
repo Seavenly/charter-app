@@ -2,20 +2,21 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
+import SVG from './SVG';
 import Button from './Button';
 
 const View = ({ children, header, back, forward }) => (
   <Wrapper>
     <Header>
       <Button onClick={back}>
-        <i className="material-icons">arrow_back</i>
+        <SVG kind="arrow_back" fill="#ffffff" />
       </Button>
       <Heading>
         <Title>{header}</Title>
       </Heading>
       {forward && (
         <Button onClick={forward}>
-          <i className="material-icons">arrow_forward</i>
+          <SVG kind="arrow_forward" fill="#ffffff" />
         </Button>
       )}
     </Header>

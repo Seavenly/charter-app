@@ -5,6 +5,7 @@ import styled from 'styled-components';
 
 import View from './View';
 import Button from './Button';
+import SVG from './SVG';
 
 const FormMessage = ({ inProp }) => (
   <Message inProp={inProp}>Booked successfully</Message>
@@ -58,7 +59,7 @@ class Booking extends Component {
               onChange={this.handleChange}
               placeholder="Name"
             />
-            <i className="material-icons">person</i>
+            <SVG kind="person" />
           </ControlWrapper>
           <Label htmlFor="form-email">Email:</Label>
           <ControlWrapper>
@@ -69,7 +70,7 @@ class Booking extends Component {
               onChange={this.handleChange}
               placeholder="Email"
             />
-            <i className="material-icons">email</i>
+            <SVG kind="email" />
           </ControlWrapper>
           <ButtonWrapper>
             <Button>Submit</Button>
@@ -126,14 +127,14 @@ const ControlWrapper = styled.div`
   display: flex;
   margin: 1rem auto;
 
-  i {
+  svg {
     background: white;
-    color: #bbb;
+    fill: #bbb;
     display: flex;
     align-items: center;
     padding: 0.5rem;
     order: -1;
-    transition: color 0.5s;
+    transition: fill 0.5s;
   }
 `;
 const Control = styled.input`
@@ -143,8 +144,8 @@ const Control = styled.input`
     border: none;
     width: 100%;
   }
-  &:focus ~ i {
-    color: ${({ theme }) => theme.colors.black};
+  &:focus ~ svg {
+    fill: ${({ theme }) => theme.colors.black};
   }
 `;
 

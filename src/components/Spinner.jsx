@@ -2,9 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled, { keyframes } from 'styled-components';
 
+import SVG from './SVG';
+
 const Spinner = ({ isVisible }) => (
   <Wrapper isVisible={isVisible}>
-    <i className="material-icons">autorenew</i>
+    <SVG kind="autorenew" size="48" />
   </Wrapper>
 );
 
@@ -32,14 +34,13 @@ const Wrapper = styled.div`
   left: 50%;
   z-index: 0;
   transform: translatex(-50%);
-  i {
+  svg {
     animation-duration: 1.5s;
     animation-timing-function: linear;
     animation-name: ${rotate360};
     animation-iteration-count: ${({ isVisible }) =>
       isVisible ? 'infinite' : 1};
-    font-size: 3rem;
-    color: ${({ theme }) => theme.colors.today};
+    fill: ${({ theme }) => theme.colors.today};
     opacity: ${({ isVisible }) => (isVisible ? 1 : 0)};
     transition: opacity 0.3s;
   }

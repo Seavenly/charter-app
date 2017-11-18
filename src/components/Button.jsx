@@ -12,7 +12,11 @@ const ControlButton = ({ children, onClick, isActive }) => (
 
 ControlButton.propTypes = {
   isActive: PropTypes.bool,
-  children: PropTypes.element.isRequired,
+  children: PropTypes.oneOfType([
+    PropTypes.element,
+    PropTypes.string,
+    PropTypes.number,
+  ]).isRequired,
   onClick: PropTypes.func.isRequired,
 };
 

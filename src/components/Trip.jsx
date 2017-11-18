@@ -1,11 +1,18 @@
 /* eslint-env browser */
 import React from 'react';
 import PropTypes from 'prop-types';
-import Moment from 'moment';
+import dateFns from 'date-fns';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 import Button from './Button';
+
+function formatTripTime(time) {
+  return dateFns.format(
+    new Date(0, 1, 1, +time.substring(0, 2), +time.substring(2)),
+    'h:mm A',
+  );
+}
 
 const Trip = ({ trip, loaded }) => (
   <Wrapper>
@@ -24,11 +31,10 @@ const Trip = ({ trip, loaded }) => (
         </div>
         <Time>
           <Type style={{ color: trip.boat.color }}>
-            {new Moment(`${trip.day}T${trip.start}`).hour() < 12 ? 'AM' : 'PM'}
+            {+trip.start.substring(0, 2) < 12 ? 'AM' : 'PM'}
           </Type>
           <span>
-            {new Moment(`${trip.day}T${trip.start}`).format('h:mm A')} -{' '}
-            {new Moment(`${trip.day}T${trip.end}`).format('h:mm A ')}
+            {formatTripTime(trip.start)} - {formatTripTime(trip.end)}
           </span>
         </Time>
       </Info>

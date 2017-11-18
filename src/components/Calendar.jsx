@@ -1,53 +1,61 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import Moment from 'moment';
+import dateFns from 'date-fns';
 import styled from 'styled-components';
 
 import View from './View';
 import Day from './Day';
 import Button from './Button';
 
-// Moment object for today's date
-const today = new Moment();
+const today = new Date();
 
 /**
  * Creates a mapped array of Day components
- * @param {Moment} calMoment - Current calendar Moment
+ * @param {Date} calDate - Current calendar Date
  * @param {Object[]} scheduledDays - Days with scheduled trips
  * @returns {Object[]} Mapped array of Day components
  */
-function daysInMonth(calMoment, scheduledDays) {
-  const tempMoment = new Moment(calMoment).startOf('month').day(0);
+function daysInMonth(calDate, scheduledDays) {
+  // Get first day of the week for current Month
+  let tempDate = dateFns.setDay(dateFns.startOfMonth(calDate), 0);
+  // Store each Day component.
   const days = [];
+  // Used inside of for loop.
+  const compareDate = day => day.date === dateFns.format(tempDate, 'YYYYMMDD');
   for (let i = 0; i < 42; i += 1) {
+    // Status of current iteration date for Day component
     let status = '';
-    if (calMoment.month() !== tempMoment.month()) status = 'inactive';
+    if (dateFns.getMonth(calDate) !== dateFns.getMonth(tempDate))
+      // If current iteration date is outside of current month
+      status = 'inactive';
     else {
-      const dayTrips = scheduledDays.find(
-        day => day.date === tempMoment.format('YYYYMMDD'),
-      );
+      // Find trip date from current iteration date.
+      // Returns object
+      const dayTrips = scheduledDays.find(compareDate);
       if (dayTrips) {
         if (dayTrips.booked === 0) status = 'open';
         else if (dayTrips.booked === dayTrips.trips.length) status = 'full';
         else status = 'partial';
       } else status = 'empty';
     }
-    if (tempMoment.format('YYMMDD') === today.format('YYMMDD'))
+    if (dateFns.format(tempDate, 'YYMMDD') === dateFns.format(today, 'YYMMDD'))
+      // Current iteration date matches today's date
       status = 'today';
     days.push(
-      <Cell>
-        <Day key={i} moment={new Moment(tempMoment)} status={status} />
+      <Cell key={i}>
+        <Day date={tempDate} status={status} />
       </Cell>,
     );
-    tempMoment.add(1, 'days');
+    // Set next day
+    tempDate = dateFns.addDays(tempDate, 1);
   }
   return days;
 }
 
-const Calendar = ({ calMoment, days, onControlClick, changeYear }) => (
+const Calendar = ({ calDate, days, onControlClick, changeYear }) => (
   <View
-    header={calMoment.format('MMMM YYYY')}
+    header={dateFns.format(calDate, 'MMMM YYYY')}
     back={() => onControlClick('LEFT')}
     forward={() => onControlClick('RIGHT')}
   >
@@ -61,25 +69,25 @@ const Calendar = ({ calMoment, days, onControlClick, changeYear }) => (
         <Cell>Fri</Cell>
         <Cell>Sat</Cell>
       </Weeks>
-      <Days>{daysInMonth(calMoment, days)}</Days>
+      <Days>{daysInMonth(calDate, days)}</Days>
       <Footer>
         <Button
-          isActive={calMoment.year() === today.year()}
-          onClick={() => changeYear(today.year())}
+          isActive={dateFns.getYear(calDate) === dateFns.getYear(today)}
+          onClick={() => changeYear(dateFns.getYear(today))}
         >
-          {today.year()}
+          {dateFns.getYear(today)}
         </Button>
         <Button
-          isActive={calMoment.year() === today.year() + 1}
-          onClick={() => changeYear(today.year() + 1)}
+          isActive={dateFns.getYear(calDate) === dateFns.getYear(today) + 1}
+          onClick={() => changeYear(dateFns.getYear(today) + 1)}
         >
-          {today.year() + 1}
+          {dateFns.getYear(today) + 1}
         </Button>
         <Button
-          isActive={calMoment.year() === today.year() + 2}
-          onClick={() => changeYear(today.year() + 2)}
+          isActive={dateFns.getYear(calDate) === dateFns.getYear(today) + 2}
+          onClick={() => changeYear(dateFns.getYear(today) + 2)}
         >
-          {today.year() + 2}
+          {dateFns.getYear(today) + 2}
         </Button>
       </Footer>
       <Legend>
@@ -104,14 +112,14 @@ const Calendar = ({ calMoment, days, onControlClick, changeYear }) => (
 );
 
 Calendar.propTypes = {
-  calMoment: PropTypes.instanceOf(Moment).isRequired,
+  calDate: PropTypes.instanceOf(Date).isRequired,
   days: PropTypes.arrayOf(PropTypes.object).isRequired,
   onControlClick: PropTypes.func.isRequired,
   changeYear: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state => ({
-  calMoment: state.calendar,
+  calDate: state.calendar,
   days: state.days,
 });
 const mapDispatchToProps = dispatch => ({

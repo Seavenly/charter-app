@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import Moment from 'moment';
+import dateFns from 'date-fns';
 import styled from 'styled-components';
 
 import View from './View';
@@ -46,10 +46,10 @@ class Trips extends Component {
   }
 
   render() {
-    const { history, moment } = this.props;
+    const { history, date } = this.props;
     return (
       <View
-        header={moment.format('ddd, MMM D YYYY')}
+        header={dateFns.format(date, 'ddd, MMM D YYYY')}
         back={() => history.goBack()}
       >
         {this.state.trips.length ? (
@@ -73,7 +73,7 @@ Trips.propTypes = {
     params: PropTypes.object,
   }).isRequired,
   trips: PropTypes.func.isRequired,
-  moment: PropTypes.instanceOf(Moment).isRequired,
+  date: PropTypes.instanceOf(Date).isRequired,
 };
 
 const mapStateToProps = state => ({
@@ -90,7 +90,7 @@ const mapStateToProps = state => ({
     }
     return tripDay.trips;
   },
-  moment: state.calendar,
+  date: state.calendar,
 });
 
 export default connect(mapStateToProps)(Trips);

@@ -1,24 +1,24 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Moment from 'moment';
+import dateFns from 'date-fns';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 
-const Day = ({ moment, status, setDay }) => (
+const Day = ({ date, status, setDay }) => (
   <Wrapper>
     <DayLink
-      to={`/trips/${moment.format('YYYYMMDD')}`}
-      onClick={() => setDay(moment)}
+      to={`/trips/${dateFns.format(date, 'YYYYMMDD')}`}
+      onClick={() => setDay(date)}
       status={status}
     >
-      <DayDate>{moment.format('DD')}</DayDate>
+      <DayDate>{dateFns.format(date, 'DD')}</DayDate>
     </DayLink>
   </Wrapper>
 );
 
 Day.propTypes = {
-  moment: PropTypes.instanceOf(Moment).isRequired,
+  date: PropTypes.instanceOf(Date).isRequired,
   status: PropTypes.string,
   setDay: PropTypes.func.isRequired,
 };
@@ -30,7 +30,7 @@ Day.defaultProps = {
 const mapStateToProps = () => ({});
 
 const mapPropstoDispatch = dispatch => ({
-  setDay: moment => dispatch({ type: 'SET_DAY', moment }),
+  setDay: date => dispatch({ type: 'SET_DAY', date: dateFns.getDate(date) }),
 });
 
 export default connect(mapStateToProps, mapPropstoDispatch)(Day);

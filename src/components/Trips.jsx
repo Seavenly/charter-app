@@ -2,9 +2,11 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Moment from 'moment';
+import styled from 'styled-components';
 
 import View from './View';
 import Trip from './Trip';
+import Spinner from './Spinner';
 
 class Trips extends Component {
   constructor(props) {
@@ -20,7 +22,10 @@ class Trips extends Component {
   }
 
   handleImageLoaded() {
-    this.setState(prevState => ({ imagesLoaded: prevState.imagesLoaded + 1 }));
+    this.setState(prevState => ({
+      imagesLoaded: prevState.imagesLoaded + 1,
+      allLoaded: prevState.imagesLoaded + 1 >= prevState.trips.length,
+    }));
   }
 
   availableTrips() {
@@ -28,13 +33,13 @@ class Trips extends Component {
     const trips = this.props.trips(this.props.match.params.day);
     if (trips) {
       available = trips.filter(t => !t.booked).map((t, index) => (
-        <li className="trips__item" key={t.id}>
-          <Trip
-            trip={t}
-            delay={`${0.5 - 0.3 / trips.length * index}s`}
-            loaded={() => this.handleImageLoaded()}
-          />
-        </li>
+        <Item
+          key={t.id}
+          delay={0.5 - 0.3 / trips.length * index}
+          allLoaded={this.state && this.state.allLoaded}
+        >
+          <Trip trip={t} loaded={() => this.handleImageLoaded()} />
+        </Item>
       ));
     }
     return available;
@@ -43,21 +48,18 @@ class Trips extends Component {
   render() {
     const { history, moment } = this.props;
     return (
-      <View header={moment.format('ddd, MMM D YYYY')} back={() => history.goBack()}>
-        <div
-          className={`trips${
-            this.state.imagesLoaded >= this.state.trips.length ? ' trips--loaded' : ''
-          }`}
-        >
-          {this.state.trips.length ? (
-            <ul className="trips__list">{this.state.trips}</ul>
-          ) : (
-            <p className="trips__message">There are no available trips for this date.</p>
-          )}
-        </div>
-        <div className="spinner">
-          <i className="material-icons">autorenew</i>
-        </div>
+      <View
+        header={moment.format('ddd, MMM D YYYY')}
+        back={() => history.goBack()}
+      >
+        {this.state.trips.length ? (
+          <List>{this.availableTrips()}</List>
+        ) : (
+          <Message>There are no available trips for this date.</Message>
+        )}
+        <Spinner
+          isVisible={this.state.imagesLoaded < this.state.trips.length}
+        />
       </View>
     );
   }
@@ -80,7 +82,9 @@ const mapStateToProps = state => ({
     if (tripDay.trips) {
       tripDay.trips = tripDay.trips.map(tripId => {
         const populatedTrip = { ...state.trips.find(t => t.id === tripId) };
-        populatedTrip.boat = state.boats.find(boat => populatedTrip.boat === boat.id);
+        populatedTrip.boat = state.boats.find(
+          boat => populatedTrip.boat === boat.id,
+        );
         return populatedTrip;
       });
     }
@@ -90,3 +94,34 @@ const mapStateToProps = state => ({
 });
 
 export default connect(mapStateToProps)(Trips);
+
+const Item = styled.li.attrs({
+  style: ({ allLoaded, delay }) => ({
+    opacity: allLoaded ? 1 : 0,
+    transform: allLoaded ? 'translateY(0)' : 'translateY(-100%)',
+    transitionDelay: `${delay}s`,
+  }),
+})`
+  padding: 0.5rem;
+  flex: 1 1 100%;
+  max-width: 16rem;
+  transition: all 0.3s;
+  opacity: 0;
+  transform: translateY(-100%);
+  position: relative;
+  z-index: 1;
+  @media (min-width: 31.25rem) {
+    flex: 0 0 calc(50% - 1rem);
+  }
+`;
+const List = styled.ul`
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  @media (min-width: 31.25rem) {
+    justify-content: flex-start;
+  }
+`;
+const Message = styled.p`
+  padding: 1rem 0 2rem;
+`;

@@ -1,27 +1,26 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import styled from 'styled-components';
+
+import Button from './Button';
 
 const View = ({ children, header, back, forward }) => (
-  <div className="view">
-    <div className="view__header">
-      <div className="control">
-        <button className="control__btn" onClick={back}>
-          <i className="material-icons">arrow_back</i>
-        </button>
-      </div>
-      <div className="view__heading">
-        <h2>{header}</h2>
-      </div>
+  <Wrapper>
+    <Header>
+      <Button onClick={back}>
+        <i className="material-icons">arrow_back</i>
+      </Button>
+      <Heading>
+        <Title>{header}</Title>
+      </Heading>
       {forward && (
-        <div className="control">
-          <button className="control__btn" onClick={forward}>
-            <i className="material-icons">arrow_forward</i>
-          </button>
-        </div>
+        <Button onClick={forward}>
+          <i className="material-icons">arrow_forward</i>
+        </Button>
       )}
-    </div>
-    <div className="view__body">{children}</div>
-  </div>
+    </Header>
+    <Body>{children}</Body>
+  </Wrapper>
 );
 
 View.propTypes = {
@@ -36,3 +35,36 @@ View.defaultProps = {
 };
 
 export default View;
+
+const Wrapper = styled.div`
+  text-align: center;
+  border-radius: 0.2rem;
+  overflow: hidden;
+`;
+const Header = styled.div`
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
+  background: ${({ theme }) => theme.colors.today};
+  padding: 0.6rem 0;
+  color: white;
+  box-shadow: 0 0.2rem rgba(0, 0, 0, 0.2);
+  position: relative;
+  z-index: 5;
+  position: fixed;
+  width: 100%;
+  max-width: 30rem;
+  border-radius: 0.2rem 0.2rem 0 0;
+`;
+const Heading = styled.div`
+  flex: 0 3 60%;
+`;
+const Title = styled.h2`
+  font-weight: 400;
+  text-transform: uppercase;
+  font-size: 1.2rem;
+  white-space: nowrap;
+`;
+export const Body = styled.div`
+  margin-top: 4.8rem;
+`;

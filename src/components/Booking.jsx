@@ -1,14 +1,13 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import CSSTransition from 'react-transition-group/CSSTransition';
+import styled from 'styled-components';
 
 import View from './View';
+import Button from './Button';
 
 const FormMessage = ({ inProp }) => (
-  <CSSTransition in={inProp} duration={500} classNames="slide">
-    <div className="form-message">Booked successfully</div>
-  </CSSTransition>
+  <Message inProp={inProp}>Booked successfully</Message>
 );
 
 FormMessage.propTypes = {
@@ -40,17 +39,19 @@ class Booking extends Component {
     const populatedTrip = trip(match.params.trip);
 
     return (
-      <View header={`Book ${populatedTrip.boat.name}`} back={() => history.goBack()}>
-        <form
-          className="booking-form"
-          onSubmit={e => this.handleSubmit(e) || bookTrip(populatedTrip.id, populatedTrip.day)}
+      <View
+        header={`Book ${populatedTrip.boat.name}`}
+        back={() => history.goBack()}
+      >
+        <Form
+          onSubmit={e =>
+            this.handleSubmit(e) ||
+            bookTrip(populatedTrip.id, populatedTrip.day)
+          }
         >
-          <label className="booking-form__label" htmlFor="form-name">
-            Name:
-          </label>
-          <div className="booking-form__control-wrapper">
-            <input
-              className="booking-form__control"
+          <Label htmlFor="form-name">Name:</Label>
+          <ControlWrapper>
+            <Control
               id="form-name"
               type="text"
               value={this.state.form['form-name']}
@@ -58,13 +59,10 @@ class Booking extends Component {
               placeholder="Name"
             />
             <i className="material-icons">person</i>
-          </div>
-          <label className="booking-form__label" htmlFor="form-email">
-            Email:
-          </label>
-          <div className="booking-form__control-wrapper">
-            <input
-              className="booking-form__control"
+          </ControlWrapper>
+          <Label htmlFor="form-email">Email:</Label>
+          <ControlWrapper>
+            <Control
               id="form-email"
               type="email"
               value={this.state.form['form-email']}
@@ -72,11 +70,11 @@ class Booking extends Component {
               placeholder="Email"
             />
             <i className="material-icons">email</i>
-          </div>
-          <div className="control">
-            <button className="control__btn">Submit</button>
-          </div>
-        </form>
+          </ControlWrapper>
+          <ButtonWrapper>
+            <Button>Submit</Button>
+          </ButtonWrapper>
+        </Form>
         <FormMessage inProp={this.state.submit} />
       </View>
     );
@@ -97,7 +95,9 @@ Booking.propTypes = {
 const mapStateToProps = state => ({
   trip: id => {
     const populatedTrip = { ...state.trips.find(trip => trip.id === +id) };
-    populatedTrip.boat = state.boats.find(boat => boat.id === populatedTrip.boat);
+    populatedTrip.boat = state.boats.find(
+      boat => boat.id === populatedTrip.boat,
+    );
     return populatedTrip;
   },
 });
@@ -107,3 +107,70 @@ const mapDispatchToProps = dispatch => ({
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Booking);
+
+const Form = styled.form`
+  position: relative;
+  max-width: 20rem;
+  margin: auto;
+  padding: 0 5%;
+`;
+const Label = styled.label`
+  display: block;
+  position: absolute;
+  z-index: -1000;
+  left: -10000px;
+`;
+const ControlWrapper = styled.div`
+  box-shadow: 0 0.2rem 0 0 #eee;
+  border-radius: 0.2rem;
+  display: flex;
+  margin: 1rem auto;
+
+  i {
+    background: white;
+    color: #bbb;
+    display: flex;
+    align-items: center;
+    padding: 0.5rem;
+    order: -1;
+    transition: color 0.5s;
+  }
+`;
+const Control = styled.input`
+  &[type='text'],
+  &[type='email'] {
+    padding: 0.5rem;
+    border: none;
+    width: 100%;
+  }
+  &:focus ~ i {
+    color: ${({ theme }) => theme.colors.black};
+  }
+`;
+
+const Message = styled.div.attrs({
+  style: ({ inProp }) => ({
+    transform: inProp ? 'translate(-50%, 0)' : 'translate(-50%, 100%)',
+  }),
+})`
+  background: #4caf50;
+  color: white;
+  text-transform: uppercase;
+  font-size: 1rem;
+  font-weight: 700;
+  padding: 1.2rem 0;
+  margin: auto;
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 100%;
+  max-width: 20rem;
+  transition: transform 0.5s;
+  border-radius: 0.2rem 0.2rem 0 0;
+`;
+const ButtonWrapper = styled.div`
+  max-width: 20rem;
+  text-align: right;
+  margin: auto;
+  margin-bottom: 1rem;
+`;

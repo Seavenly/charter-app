@@ -1,34 +1,43 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import styled, { keyframes } from 'styled-components';
 
-import SVG from './SVG';
+import styled, { withProps, keyframes } from '@src/styledComponents';
+import SVG, { Icon } from '@src/components/SVG';
 
-const Spinner = ({ isVisible }) => (
+interface IPassedProps {
+  /** Is the spinner currenty visible */
+  isVisible: boolean;
+}
+type Props = IPassedProps;
+
+const Spinner: React.StatelessComponent<Props> = ({ isVisible }) => (
   <Wrapper isVisible={isVisible}>
-    <SVG kind="autorenew" size="48" />
+    <SVG icon={Icon.Autorenew} size={48} />
   </Wrapper>
 );
 
-Spinner.propTypes = {
-  isVisible: PropTypes.bool,
-};
-Spinner.defaultProps = {
-  isVisible: true,
-};
-
 export default Spinner;
+
+/**
+ * =================
+ * Styled Components
+ * =================
+ */
+
+type WrapperProps = { isVisible: boolean } & React.HTMLProps<HTMLDivElement>;
+
+const Styled = {
+  Wrapper: withProps<WrapperProps>()(styled.div),
+};
 
 const rotate360 = keyframes`
   from {
     transform: rotate(0deg);
   }
-
   to {
     transform: rotate(360deg);
   }
 `;
-const Wrapper = styled.div`
+const Wrapper = Styled.Wrapper`
   position: absolute;
   top: 8rem;
   left: 50%;

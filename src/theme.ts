@@ -1,4 +1,13 @@
-export default {
+export interface ITheme {
+  colors: {
+    [color: string]: string;
+  };
+  settings: {
+    [setting: string]: string;
+  };
+}
+
+const theme: ITheme = {
   colors: {
     today: '#039BE5',
     open: '#4CAF50',
@@ -11,3 +20,5 @@ export default {
     fadeSpeed: '0.3s',
   },
 };
+
+export default theme;

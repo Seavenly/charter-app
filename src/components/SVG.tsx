@@ -1,8 +1,35 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 
-const SVG = ({ fill, kind, size }) => {
-  switch (kind) {
+/** SVG icons available from the Google Material Icon set */
+export const enum Icon {
+  ArrowBack = 'arrow_back',
+  ArrowForward = 'arrow_forward',
+  Autorenew = 'autorenew',
+  Email = 'email',
+  Person = 'person',
+}
+
+interface IPassedProps {
+  /** Type of svg */
+  icon: Icon;
+  /** Fill color of the svg */
+  fill?: string;
+  /** Square length in pixels */
+  size?: number;
+}
+type Props = IPassedProps;
+
+interface IDefaultProps {
+  fill: string;
+  size: number;
+}
+const defaultProps: IDefaultProps = {
+  fill: '#2d2d2d',
+  size: 24,
+};
+
+const SVG: React.StatelessComponent<Props> = ({ icon, fill, size }) => {
+  switch (icon) {
     case 'arrow_back':
       return (
         <svg
@@ -72,16 +99,6 @@ const SVG = ({ fill, kind, size }) => {
       return null;
   }
 };
-
-SVG.propTypes = {
-  fill: PropTypes.string,
-  kind: PropTypes.string.isRequired,
-  size: PropTypes.number,
-};
-
-SVG.defaultProps = {
-  fill: '#2d2d2d',
-  size: 24,
-};
+SVG.defaultProps = defaultProps;
 
 export default SVG;

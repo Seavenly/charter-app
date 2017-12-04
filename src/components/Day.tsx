@@ -1,15 +1,19 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+import { Link, LinkProps } from 'react-router-dom';
 import dateFns from 'date-fns';
-import { Link } from 'react-router-dom';
-import { connect } from 'react-redux';
-import styled from 'styled-components';
 
-const Day = ({ date, status, setDay }) => (
+import styled from '@src/styledComponents';
+
+interface IPassedProps {
+  date: Date;
+  status: string;
+}
+type Props = IPassedProps;
+
+const Day: React.StatelessComponent<Props> = ({ date, status }) => (
   <Wrapper>
     <DayLink
-      to={`/trips/${dateFns.format(date, 'YYYYMMDD')}`}
-      onClick={() => setDay(date)}
+      to={`/trips/${dateFns.format(date, 'YYYY-MM-DD')}`}
       status={status}
     >
       <DayDate>{dateFns.format(date, 'DD')}</DayDate>
@@ -17,23 +21,17 @@ const Day = ({ date, status, setDay }) => (
   </Wrapper>
 );
 
-Day.propTypes = {
-  date: PropTypes.instanceOf(Date).isRequired,
-  status: PropTypes.string,
-  setDay: PropTypes.func.isRequired,
-};
+export default Day;
 
-Day.defaultProps = {
-  status: '',
-};
+/**
+ * =================
+ * Styled Components
+ * =================
+ */
 
-const mapStateToProps = () => ({});
-
-const mapPropstoDispatch = dispatch => ({
-  setDay: date => dispatch({ type: 'SET_DAY', date: dateFns.getDate(date) }),
-});
-
-export default connect(mapStateToProps, mapPropstoDispatch)(Day);
+interface IDayLinkProps extends LinkProps {
+  status: string;
+}
 
 const Wrapper = styled.div`
   &::after {
@@ -42,7 +40,7 @@ const Wrapper = styled.div`
     padding-bottom: 100%;
   }
 `;
-const DayLink = styled(Link)`
+const DayLink = styled(Link as React.ComponentClass<IDayLinkProps>)`
   color: ${({ theme, status }) => {
     switch (status) {
       case 'today':

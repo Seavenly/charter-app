@@ -1,8 +1,20 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import styled from 'styled-components';
 
-const ControlButton = ({ children, onClick, isActive }) => (
+import styled, { withProps } from '@src/styledComponents';
+
+interface IPassedProps {
+  /** Is the button currently active or not */
+  isActive?: boolean;
+  /** Action to perfom when the user clicks the button */
+  onClick?: () => void;
+}
+type Props = IPassedProps;
+
+const ControlButton: React.StatelessComponent<Props> = ({
+  children,
+  onClick = () => null,
+  isActive = false,
+}) => (
   <Wrapper>
     <Button onClick={onClick} isActive={isActive}>
       {children}
@@ -10,26 +22,26 @@ const ControlButton = ({ children, onClick, isActive }) => (
   </Wrapper>
 );
 
-ControlButton.propTypes = {
-  isActive: PropTypes.bool,
-  children: PropTypes.oneOfType([
-    PropTypes.element,
-    PropTypes.string,
-    PropTypes.number,
-  ]).isRequired,
-  onClick: PropTypes.func.isRequired,
-};
-
-ControlButton.defaultProps = {
-  isActive: false,
-};
-
 export default ControlButton;
+
+/**
+ * =================
+ * Styled Components
+ * =================
+ */
+
+interface IButtonProps {
+  isActive?: IPassedProps['isActive'];
+}
+const Styled = {
+  Button: withProps<IButtonProps>()(styled.button),
+};
 
 const Wrapper = styled.div`
   flex: 0 1 20%;
 `;
-const Button = styled.button`
+
+const Button = Styled.Button`
   border: none;
   background: transparent;
   color: ${({ theme, isActive }) => (isActive ? theme.colors.today : 'white')};

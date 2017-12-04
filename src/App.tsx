@@ -1,5 +1,6 @@
 import React from 'react';
 import { Provider } from 'react-redux';
+import { RouteComponentProps } from 'react-router';
 import {
   BrowserRouter as Router,
   Route,
@@ -8,32 +9,32 @@ import {
 } from 'react-router-dom';
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
 import styled, { ThemeProvider } from 'styled-components';
-
 import 'normalize.css';
-import './GlobalStyles';
-import theme from './Theme';
 
-import store from './store/index';
-import Calendar from './components/Calendar';
-import Trips from './components/Trips';
-import Booking from './components/Booking';
+import '@src/globalStyles';
+import theme from '@src/theme';
+import store from '@src/store';
+import Calendar from '@src/components/Calendar';
+import Trips from '@src/components/Trips';
+import Booking from '@src/components/Booking';
 
-const WithRouter = withRouter(({ location }) => (
+const Paths = ({ location }: RouteComponentProps<undefined>) => (
   <TransitionGroup>
     <CSSTransition key={location.key} classNames="fade" timeout={1000}>
       <Switch location={location}>
         <Route exact path="/" component={Calendar} />
-        <Route exact path="/trips/:day" component={Trips} />
-        <Route exact path="/book/:trip" component={Booking} />
+        <Route exact path="/trips/:date" component={Trips} />
+        <Route exact path="/book/:date/:tripId" component={Booking} />
       </Switch>
     </CSSTransition>
   </TransitionGroup>
-));
+);
+const WithRouter = withRouter(Paths);
 
 const App = () => (
   <Provider store={store}>
     <ThemeProvider theme={theme}>
-      <Router basename="/charter-app">
+      <Router basename="">
         <AppContainer>
           <WithRouter />
         </AppContainer>

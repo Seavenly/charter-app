@@ -1,22 +1,36 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import styled from 'styled-components';
 
-import SVG from './SVG';
-import Button from './Button';
+import styled from '@src/styledComponents';
+import SVG, { Icon } from '@src/components/SVG';
+import Button from '@src/components/Button';
 
-const View = ({ children, header, back, forward }) => (
+interface IPassedProps {
+  /** Header title for the view */
+  header: string;
+  /** Function to call when pressing the back button */
+  back: () => void;
+  /** Function to call when pressing the forward button */
+  forward?: () => void;
+}
+type Props = IPassedProps;
+
+const View: React.StatelessComponent<Props> = ({
+  children,
+  header,
+  back,
+  forward,
+}) => (
   <Wrapper>
     <Header>
       <Button onClick={back}>
-        <SVG kind="arrow_back" fill="#ffffff" />
+        <SVG icon={Icon.ArrowBack} fill="#ffffff" />
       </Button>
       <Heading>
         <Title>{header}</Title>
       </Heading>
       {forward && (
         <Button onClick={forward}>
-          <SVG kind="arrow_forward" fill="#ffffff" />
+          <SVG icon={Icon.ArrowForward} fill="#ffffff" />
         </Button>
       )}
     </Header>
@@ -24,18 +38,13 @@ const View = ({ children, header, back, forward }) => (
   </Wrapper>
 );
 
-View.propTypes = {
-  children: PropTypes.element.isRequired,
-  header: PropTypes.string.isRequired,
-  back: PropTypes.func.isRequired,
-  forward: PropTypes.func,
-};
-
-View.defaultProps = {
-  forward: null,
-};
-
 export default View;
+
+/**
+ * =================
+ * Styled Components
+ * =================
+ */
 
 const Wrapper = styled.div`
   text-align: center;

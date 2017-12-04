@@ -1,5 +1,5 @@
 import { injectGlobal } from 'styled-components';
-import theme from './Theme';
+import theme from './theme';
 import { Body } from './components/View';
 
 export default injectGlobal`

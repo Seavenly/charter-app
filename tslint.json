@@ -1,0 +1,30 @@
+{
+  "extends": [
+    "tslint:latest",
+    "tslint-config-airbnb",
+    "tslint-react",
+    "tslint-config-prettier"
+  ],
+  "rules": {
+    "object-literal-sort-keys": false,
+    "ordered-imports": false,
+    "no-unused-variable": true,
+    "member-ordering": {
+      "options": {
+        "order": "instance-sandwich"
+      }
+    },
+    "variable-name": [
+      true,
+      "ban-keywords",
+      "check-format",
+      "allow-leading-underscore",
+      "allow-pascal-case"
+    ],
+    "interface-name": [true, "always-prefix"],
+    "jsx-boolean-value": [true, "never"],
+    "import-name": false,
+    "no-implicit-dependencies": false,
+    "no-submodule-imports": false
+  }
+}
